@@ -4,7 +4,7 @@ from typing import List, Tuple, Dict
 from data_helpers import parse_input, pack_input, parse_output, pack_output
 
 
-def verifier(n: int, hospital_prefs: List[List[int]], student_prefs: List[List[int]], pairs: Dict[int, int]) -> bool:
+def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[int, List[int]], pairs: Dict[int, int]) -> bool:
     """ (sara)
     Takes in n, hospital_prefs, student_prefs matching gale_shapley() input, and pairs matching gale_shapley() output.
     Verifies that the each hospital and each student is matched exactly once.

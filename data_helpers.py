@@ -28,7 +28,7 @@ Example:
 """
 
 
-def generate_input(n: int) -> Tuple[int, List[List[int]], List[List[int]]]:
+def generate_input(n: int) -> Tuple[int, Dict[int, List[int]], Dict[int, List[int]]]:
     """ (sara)
     Takes in n, the number of hospitals / students.
     Generates and returns random hospital_prefs and student_prefs matching gale_shapley() input.
@@ -45,15 +45,24 @@ def generate_input_file(n: int) -> str:
     return pack_input(n, hospital_prefs, student_prefs)
 
 
-def parse_input(input_file: str) -> Tuple[int, List[List[int]], List[List[int]]]:
+def parse_input(input_file: str) -> Tuple[int, Dict[int, List[int]], Dict[int, List[int]]]:
     """ (finn)
     Parse input from a file in the G-S input file format.
     Returns n, hospital_prefs, student_prefs (matching gale_shapley() input) packed in a tuple.
     """
-    pass
+    # Open file and fetch lines
+    with open(input_file, 'r') as f:
+        lines = f.read().strip().split('\n')
+    
+    # Unpack line data
+    n = int(lines[0])
+    hospital_prefs = [list(map(int, lines[i].split())) for i in range(1, n + 1)]
+    student_prefs = [list(map(int, lines[i].split())) for i in range(n + 1, 2 * n + 1)]
+    
+    return n, hospital_prefs, student_prefs
 
 
-def pack_input(n: int, hospital_prefs: List[List[int]], student_prefs: List[List[int]]) -> str:
+def pack_input(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[int, List[int]]) -> str:
     """ (sara)
     Creates a .in file containing input in the G-S input file format.
     Creates a file "data/n.out" in the G-S input file format (where n is the number of hospitals / students).
@@ -76,4 +85,14 @@ def pack_output(output: Dict[int, int]) -> str:
     Creates a file "data/n.out" in the G-S output file format (where n is the number of hospitals / students).
     Returns the generated file name.
     """
-    pass
+    # Create .out file
+    n = len(output)
+    filename = f'data/{n}.out'
+    
+    # Write pairs to file
+    with open(filename, 'w') as f:
+        for hospital in range(1, n + 1):
+            student = output[hospital]
+            f.write(f'{hospital} {student}\n')
+    
+    return filename
