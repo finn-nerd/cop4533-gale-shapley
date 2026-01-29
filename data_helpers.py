@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from typing import List, Tuple, Dict
+import random
 
 """
 G-S input file format:
@@ -36,8 +37,27 @@ def generate_input(n: int) -> Tuple[int, Dict[int, List[int]], Dict[int, List[in
     student_prefs is the same format, but for students' preferences of hospitals.
     Returns n, hospital_prefs, student_prefs packed in a tuple.
     """
-    pass
 
+    # Populate a list of n hospitals/students.
+    ogList = []
+    for num in range(1, n + 1):
+        ogList.append(num)
+
+    hospitalDict = {}
+    studentDict = {}
+
+    # Loop through each hospital/student and add them and their preference list to their respective dict.
+    for num in range(1, n + 1):
+        # Shuffle ogList to get randomized preference lists for hospitals/students.
+        random.shuffle(ogList)
+        hospitalDict[num] = ogList
+
+        random.shuffle(ogList)
+        studentDict[num] = ogList
+
+    resultTuple = (n, hospitalDict, studentDict)
+
+    return resultTuple
 
 def generate_input_file(n: int) -> str:
     """ Shortcut function to generate input file for testing. """
@@ -68,7 +88,31 @@ def pack_input(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict
     Creates a file "data/n.out" in the G-S input file format (where n is the number of hospitals / students).
     Returns the generated file name.
     """
-    pass
+
+    # Create .in file.
+    filename = f"data/{n}.in"
+
+    # Write hospital_prefs and student_prefs to file.
+    with open(filename, "w") as f:
+        f.write(f"{n}\n")
+
+        # Write each hospital's preference list to file.
+        for hospital in range(1, n + 1):
+            # Get's hospital's preference list.
+            prefs = hospital_prefs[hospital]
+
+            # Converts ints to strings and joins them with spaces.
+            f.write(" ".join(map(str, prefs)) + "\n")
+
+        # Write each student's preference list to file.
+        for student in range(1, n + 1):
+            # Get's hospital's preference list.
+            prefs = student_prefs[student]
+
+            # Converts numbers to strings and joins them with spaces.
+            f.write(" ".join(map(str, prefs)) + "\n")
+
+    return filename
 
 
 def parse_output(output: str) -> Dict[int, int]:
@@ -76,7 +120,24 @@ def parse_output(output: str) -> Dict[int, int]:
     Parse output from a file in the G-S output file format.
     Returns output matching gale_shapley() output.
     """
-    pass
+
+    # Open file and fetch lines.
+    lines = output.strip().splitlines()
+
+    pairs = {}
+
+    # Goes through each line in file.
+    for line in lines:
+        # Splits the line at the whitespace.
+        h_str, s_str = line.split()
+
+        # Converts strings to ints.
+        hospital = int(h_str)
+        student = int(s_str)
+
+        pairs[hospital] = student
+
+    return pairs
 
 
 def pack_output(output: Dict[int, int]) -> str:
