@@ -8,6 +8,7 @@ def gale_shapley(n: int, hospital_preferences: Dict[int, List[int]], student_pre
     Input:
         n: number of hospitals / students
         hospital_prefs: dict of hospital preferences, associating [hospital, [student preference list]]
+        hospital_prefs: dict of hospital preferences, associating [hospital, [student preference list]]
         student_prefs: same format as hospital_prefs, but for students' preferences of hospitals
     Output:
         A dict of formed pairs using hospitals as keys and students as values [hospital, student]
