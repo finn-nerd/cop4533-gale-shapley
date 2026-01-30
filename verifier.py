@@ -88,8 +88,6 @@ def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[i
     print("VALID STABLE")
     return True
 
-
-
 def main():
     # Choose input mode
     while True:
