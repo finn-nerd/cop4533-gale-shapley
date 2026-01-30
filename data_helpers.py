@@ -115,27 +115,31 @@ def pack_input(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict
     return filename
 
 
-def parse_output(output: str) -> Dict[int, int]:
+def parse_output(filename: str) -> Dict[int, int]:
     """ (sara)
     Parse output from a file in the G-S output file format.
     Returns output matching gale_shapley() output.
     """
 
-    # Open file and fetch lines.
-    lines = output.strip().splitlines()
-
     pairs = {}
 
-    # Goes through each line in file.
-    for line in lines:
-        # Splits the line at the whitespace.
-        h_str, s_str = line.split()
+    # Read in file contents.
+    with open(filename, "r") as f:
+        for line in f:
+            line = line.strip()
 
-        # Converts strings to ints.
-        hospital = int(h_str)
-        student = int(s_str)
+            # If its an empty line, continue.
+            if not line:
+                continue
 
-        pairs[hospital] = student
+            # Check if the line doesn't have 2 items in it.
+            parts = line.split()
+            if len(parts) != 2:
+                raise ValueError(f"Invalid output line: '{line}'")
+
+            # Put hospital, student into pairs.
+            hospital, student = map(int, parts)
+            pairs[hospital] = student
 
     return pairs
 

@@ -4,7 +4,7 @@ from typing import List, Tuple, Dict
 from data_helpers import parse_input, pack_input, parse_output, pack_output
 import time
 from gale_shapley import gale_shapley
-from data_helpers import generate_input
+from data_helpers import generate_input, parse_input, parse_output
 import matplotlib.pyplot as plt
 
 
@@ -45,7 +45,7 @@ def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[i
 
         # We also check if the value of student == 0. If it is, this is our way to represent that a student is null/missing.
         if student == 0:
-            print("INVALID (Missing Student for Hospital: " + hospital + ")")
+            print("INVALID (Missing Student for Hospital: " + str(hospital) + ")")
             return False
 
         # Add matching to reversePairs
@@ -55,7 +55,7 @@ def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[i
     for hospital in range(1, n + 1):
         # Get the hospital's current assignment and preference list.
         currentStudent = pairs[hospital]
-        hospitalList = hospital_prefs[hospital]
+        hospitalList = hospital_prefs[hospital - 1]
 
         for student in range(1, n + 1):
             # Bool to indicate if both hospital and student prefer each other.
@@ -72,7 +72,7 @@ def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[i
 
             # Get student's current assignment and preference list.
             currentHospital = reversePairs[student]
-            studentList = student_prefs[student]
+            studentList = student_prefs[student - 1]
 
             # Get indexes of the student's current assignment and new hospital.
             currentHospitalIdx = studentList.index(currentHospital)
@@ -84,7 +84,7 @@ def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[i
 
             # If both the hospital and student prefer each other over their current assignment, they're unstable.
             if hospitalPrefer == True and studentPrefer == True:
-                print("UNSTABLE [" + hospital + ", " + student + "]")
+                print("UNSTABLE [" + str(hospital) + ", " + str(student) + "]")
                 return False
 
     # If made it here, matchings are valid and stable.
@@ -151,7 +151,12 @@ def main():
     plt.suptitle("Runtimes for gale_shapley() and verifier()")
     plt.show()
 
-
-
 if __name__ == "__main__":
     main()
+
+    # Test verifier on example test files to see how it handles INVALID/UNSTABLE data.
+    # n, hospital_prefs, student_prefs = parse_input("data/test.in")
+    # path = pack_input(n, hospital_prefs, student_prefs)
+    # print(path)
+    # resultMatching = parse_output("data/test.out")
+    # verifier(n, hospital_prefs, student_prefs, resultMatching)
