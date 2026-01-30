@@ -55,7 +55,7 @@ def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[i
     for hospital in range(1, n + 1):
         # Get the hospital's current assignment and preference list.
         currentStudent = pairs[hospital]
-        hospitalList = hospital_prefs[hospital - 1]
+        hospitalList = hospital_prefs[hospital]
 
         for student in range(1, n + 1):
             # Bool to indicate if both hospital and student prefer each other.
@@ -72,7 +72,7 @@ def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[i
 
             # Get student's current assignment and preference list.
             currentHospital = reversePairs[student]
-            studentList = student_prefs[student - 1]
+            studentList = student_prefs[student]
 
             # Get indexes of the student's current assignment and new hospital.
             currentHospitalIdx = studentList.index(currentHospital)
@@ -155,8 +155,8 @@ if __name__ == "__main__":
     main()
 
     # Test verifier on example test files to see how it handles INVALID/UNSTABLE data.
-    # n, hospital_prefs, student_prefs = parse_input("data/test.in")
+    # n, hospital_prefs, student_prefs = parse_input("data/example.in")
     # path = pack_input(n, hospital_prefs, student_prefs)
     # print(path)
-    # resultMatching = parse_output("data/test.out")
+    # resultMatching = parse_output("data/example.out")
     # verifier(n, hospital_prefs, student_prefs, resultMatching)

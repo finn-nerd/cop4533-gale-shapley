@@ -142,11 +142,15 @@ def parse_input(input_file: str) -> Tuple[int, Dict[int, List[int]], Dict[int, L
 
     # Parse preferences
     try:
-        hospital_prefs = {i + 1: hospital_prefs[i] for i in range(n)}
-        student_prefs = {i + 1: student_prefs[i] for i in range(n)}
+        hospital_lists = [list(map(int, lines[i].split())) for i in range(1, n + 1)]
+        student_lists  = [list(map(int, lines[i].split())) for i in range(n + 1, 2 * n + 1)]
     except ValueError:
         print("Parse_Input Error: preferences must contain integers only")
         return -1, None, None
+    
+    # Convert preference lists to dicts
+    hospital_prefs = {i + 1: hospital_lists[i] for i in range(n)}
+    student_prefs  = {i + 1: student_lists[i]  for i in range(n)}
 
     # Validate preference lists
     if not valid_input(n, hospital_prefs, student_prefs):
