@@ -24,11 +24,10 @@
 1. Run either command in the command line:
 * cat data/example.in | python gale_shapley.py
     * This will utilize our already made input file in the "data" folder and pass that into our matcher.
+    * Replace with any valid input file you wish.
 * python gale_shapley.py
-    * This will allow the user to manually type in the inputs to the matcher. The user must type the input in the format:  
-    n  
-    hospital's preference list (n lines, n numbers long each)  
-    student's preference list (n lines, n numbers long each)
+    * This will allow the user to manually type in the inputs to the matcher.
+    * They will be given instructions prompted for the correct inputs.
     * Example user input:  
     3  
     1 2 3  
@@ -41,8 +40,13 @@
 The pairings from the matcher should print in the command line. The pairings should match the "example.out" file in "data/example.out". 
 
 ### **To run the verifier:**
+* Run python verifier.py
+* It will prompt the user for input method (.in file or manual input).
+* It will ask you to either provide pairings or use a .out file.
+* It will then validate the pairings.
 
 ### **To get the graph for runtimes of the matcher and verifier:**
+* Run python scalability.py
 
 ### **Assumptions**
 * Have "python" already installed.
