@@ -35,7 +35,7 @@ def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[i
 
     # Dicts cannot have identical keys, meaning that there is automatically no duplicate hospitals.
     # We'll check for duplicate/missing students then.
-    for hospital, student in pairs:
+    for hospital, student in pairs.items():
         # If this student was visited before, then this is a duplicate student and invalid. Else, we add student to visitedStudents.
         if(student in visitedStudents):
             print("INVALID (Duplicate Student in Final Matchings) ")
