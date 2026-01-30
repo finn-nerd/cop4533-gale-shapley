@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from typing import List, Dict
+from data_helpers import valid_input
 
 
 def gale_shapley(n: int, hospital_preferences: Dict[int, List[int]], student_preferences: Dict[int, List[int]]) -> Dict[int, int]:
@@ -16,8 +17,7 @@ def gale_shapley(n: int, hospital_preferences: Dict[int, List[int]], student_pre
 
     ###### Initialization ######
 
-    # Check valid input
-    if len(hospital_preferences) != n or len(student_preferences) != n:
+    if not valid_input(n, hospital_preferences, student_preferences):
         return {}
 
     # Copy input lists to avoid modifying them

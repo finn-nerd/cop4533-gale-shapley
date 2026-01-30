@@ -29,6 +29,44 @@ Example:
 """
 
 
+def valid_input(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[int, List[int]]) -> bool:
+    if n < 1:
+        print("Input Error: n must be at least 1.")
+        return False
+
+    if len(hospital_prefs) != n or len(student_prefs) != n:
+        print("Input Error: Hospital/student count not equal to n.")
+        return False
+
+    # Keys must be exactly 1..n
+    valid_keys = set(range(1, n + 1))
+    if set(hospital_prefs.keys()) != valid_keys:
+        print("Input Error: Hospital keys must be exactly 1..n.")
+        return False
+    if set(student_prefs.keys()) != valid_keys:
+        print("Input Error: Student keys must be exactly 1..n.")
+        return False
+
+    # Preference values must be exactly 1..n
+    for hospital, prefs in hospital_prefs.items():
+        if len(set(prefs)) != n:
+            print(f"Input Error: Hospital {hospital}'s preference list contains duplicates or invalid entries.")
+            return False
+        if set(prefs) != valid_keys:
+            print(f"Input Error: Hospital {hospital}'s preference list is not a permutation of 1..n.")
+            return False
+
+    for student, prefs in student_prefs.items():
+        if len(set(prefs)) != n:
+            print(f"Input Error: Student {student}'s preference list contains duplicates or invalid entries.")
+            return False
+        if set(prefs) != valid_keys:
+            print(f"Input Error: Student {student}'s preference list is not a permutation of 1..n.")
+            return False
+        
+    return True
+
+
 def generate_input(n: int) -> Tuple[int, Dict[int, List[int]], Dict[int, List[int]]]:
     """ (sara)
     Takes in n, the number of hospitals / students.
@@ -50,10 +88,10 @@ def generate_input(n: int) -> Tuple[int, Dict[int, List[int]], Dict[int, List[in
     for num in range(1, n + 1):
         # Shuffle ogList to get randomized preference lists for hospitals/students.
         random.shuffle(ogList)
-        hospitalDict[num] = ogList
+        hospitalDict[num] = ogList.copy()
 
         random.shuffle(ogList)
-        studentDict[num] = ogList
+        studentDict[num] = ogList.copy()
 
     resultTuple = (n, hospitalDict, studentDict)
 
@@ -70,15 +108,51 @@ def parse_input(input_file: str) -> Tuple[int, Dict[int, List[int]], Dict[int, L
     Parse input from a file in the G-S input file format.
     Returns n, hospital_prefs, student_prefs (matching gale_shapley() input) packed in a tuple.
     """
-    # Open file and fetch lines
-    with open(input_file, 'r') as f:
-        lines = f.read().strip().split('\n')
-    
-    # Unpack line data
-    n = int(lines[0])
-    hospital_prefs = [list(map(int, lines[i].split())) for i in range(1, n + 1)]
-    student_prefs = [list(map(int, lines[i].split())) for i in range(n + 1, 2 * n + 1)]
-    
+    # Attempt to Open File
+    try:
+        with open(input_file, 'r') as f:
+            lines = [line.strip() for line in f if line.strip()]
+    except FileNotFoundError:
+        print("Parse_Input Error: input file not found")
+        return -1, None, None
+    except OSError as e:
+        print(f"Parse_Input Error opening file: {e}")
+        return -1, None, None
+
+    if not lines:
+        print("Parse_Input Error: input file is empty")
+        return -1, None, None
+
+    # Parse n
+    try:
+        n = int(lines[0])
+    except ValueError:
+        print("Parse_Input Error: first line must be an integer (n)")
+        return -1, None, None
+    if n <= 0:
+        print("Parse_Input Error: n must be positive")
+        return -1, None, None
+
+
+    # Check line amount
+    expected_lines = 1 + 2 * n
+    if len(lines) != expected_lines:
+        print(f"Parse_Input Error: expected {expected_lines} lines, got {len(lines)}")
+        return -1, None, None
+
+    # Parse preferences
+    try:
+        hospital_prefs = {i + 1: hospital_prefs[i] for i in range(n)}
+        student_prefs = {i + 1: student_prefs[i] for i in range(n)}
+    except ValueError:
+        print("Parse_Input Error: preferences must contain integers only")
+        return -1, None, None
+
+    # Validate preference lists
+    if not valid_input(n, hospital_prefs, student_prefs):
+        return -1, None, None
+
+    # Return successfully
     return n, hospital_prefs, student_prefs
 
 
@@ -88,6 +162,9 @@ def pack_input(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict
     Creates a file "data/n.out" in the G-S input file format (where n is the number of hospitals / students).
     Returns the generated file name.
     """
+
+    if not valid_input(n, hospital_prefs, student_prefs):
+        return ""
 
     # Create .in file.
     filename = f"data/{n}.in"
@@ -155,9 +232,13 @@ def pack_output(output: Dict[int, int]) -> str:
     filename = f'data/{n}.out'
     
     # Write pairs to file
-    with open(filename, 'w') as f:
-        for hospital in range(1, n + 1):
-            student = output[hospital]
-            f.write(f'{hospital} {student}\n')
+    try:
+        with open(filename, 'w') as f:
+            for hospital in range(1, n + 1):
+                student = output[hospital]  # may KeyError
+                f.write(f"{hospital} {student}\n")
+    except KeyError as e:
+        print(f"Pack_Output Error: missing hospital key {e}")
+        return ""
     
     return filename
