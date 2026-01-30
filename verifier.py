@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-
-from typing import List, Tuple, Dict
-from data_helpers import parse_input, pack_input, parse_output, pack_output
-import time
+import os
+from typing import List, Dict
 from gale_shapley import gale_shapley
-from data_helpers import generate_input, parse_input, parse_output
-import matplotlib.pyplot as plt
+from data_helpers import read_input, read_pairs, parse_input, parse_output
 
 
 def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[int, List[int]], pairs: Dict[int, int]) -> bool:
@@ -94,69 +91,66 @@ def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[i
 
 
 def main():
-    """ (sara)
-    Measures the running time of gale_shapley() and verifier() on progressively increasing n.
-    Graphs the run time of each function using matplotlib line graph, with n on the x-axis and run time on the y-axis.
-    Comment the trend of the graphs.
-    """
-    
-    # Create a list of n to test.
-    listN = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+    # Choose input mode
+    while True:
+        mode = input("Which input method? file (1) or manual (2): ").strip()
+        if mode in ("1", "2"):
+            break
+        print("Invalid choice. Enter 1 or 2.")
 
-    # Create lists to record runtimes of gale_shapley() and verifier().
-    listRunTimeGS = []
-    listRunTimeV = []
+    if mode == "1":
+        # .in file
+        while True:
+            in_path = input("Enter .in file path: ").strip()
+            if in_path.endswith(".in") and os.path.isfile(in_path):
+                n, hospital_prefs, student_prefs = parse_input(in_path)
+                if n >= 1:
+                    break
+            print("Invalid .in file.")
 
-    # Test each n and see how it affects runtime in gale_shapley() and verifier().
-    for n in listN:
-        # Get inputs for gale_shapley() and verifier().
-        tempTuple = generate_input(n)
-        hospitalPref = tempTuple[1]
-        studentPref = tempTuple[2]
+        # Manual vs .out file
+        while True:
+            resp = input("Use existing .out pairings? (Y/N): ").strip().lower()
+            if resp in ("y", "n"):
+                break
+            print("Enter Y or N.")
+        if resp == "y":
+            # .out file
+            while True:
+                out_path = input("Enter .out file path: ").strip()
+                if out_path.endswith(".out") and os.path.isfile(out_path):
+                    pairs = parse_output(out_path)
+                    if len(pairs) >= 1:
+                        break
+                print("Invalid .out file.")
+            
+        else:
+            # Use gale_shapley
+            pairs = gale_shapley(n, hospital_prefs, student_prefs)
+            print("----- Gale-Shapley Pairings -----")
+            for hospital, student in pairs.items():
+                print(f"{hospital} {student}")
 
-        dictGS = {}
+    else:
+        n, hospital_prefs, student_prefs = read_input()
 
-        # Start and stop timer for running gale_shapley() with specific input.
-        startGS = time.time()
-        dictGS = gale_shapley(n, hospitalPref, studentPref)
-        endGS = time.time()
+        while True:
+            resp = input("Manually input pairings? (Y/N): ").strip().lower()
+            if resp in ("y", "n"):
+                break
+            print("Enter Y or N.")
 
-        # Start and stop timer for running verifier() with specific input.
-        startV = time.time()
-        verifier(n, hospitalPref, studentPref, dictGS)
-        endV = time.time()
+        if resp == "y":
+            pairs = read_pairs(n)
+        else:
+            pairs = gale_shapley(n, hospital_prefs, student_prefs)
+            print("----- Gale-Shapley Pairings -----")
+            for hospital, student in pairs.items():
+                print(f"{hospital} {student}")
+            
 
-        # Calculate running time and store in listRunTimeGS and listRunTimeV.
-        runtimeGS = endGS - startGS
-        runtimeV = endV - startV
-        listRunTimeGS.append(runtimeGS)
-        listRunTimeV.append(runtimeV)
-
-    # Plot line graph of gale_shapley() runtimes.
-    plt.subplot(1, 2, 1)
-    plt.plot(listN, listRunTimeGS, color='blue', marker='o')
-    plt.grid(True)
-    plt.title("Runtimes of gale_shapley()")
-    plt.xlabel("Input \"n\"")
-    plt.ylabel("Runtime")
-
-    # Plot line graph of verifier() runtimes.
-    plt.subplot(1, 2, 2)
-    plt.plot(listN, listRunTimeV, color='red', marker='o')
-    plt.grid(True)
-    plt.title("Runtimes of verifier()")
-    plt.xlabel("Input \"n\"")
-    plt.ylabel("Runtime")
-
-    plt.suptitle("Runtimes for gale_shapley() and verifier()")
-    plt.show()
+    print("Running verifier...")
+    verifier(n, hospital_prefs, student_prefs, pairs)
 
 if __name__ == "__main__":
     main()
-
-    # Test verifier on example test files to see how it handles INVALID/UNSTABLE data.
-    # n, hospital_prefs, student_prefs = parse_input("data/example.in")
-    # path = pack_input(n, hospital_prefs, student_prefs)
-    # print(path)
-    # resultMatching = parse_output("data/example.out")
-    # verifier(n, hospital_prefs, student_prefs, resultMatching)

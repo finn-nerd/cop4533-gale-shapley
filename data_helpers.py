@@ -246,3 +246,75 @@ def pack_output(output: Dict[int, int]) -> str:
         return ""
     
     return filename
+
+
+def read_input():
+    # Read n
+    while True:
+        print("Enter an integer >1 for n.")
+        try:
+            n = int(input().strip())
+            if n > 1:
+                break
+        except ValueError:
+            pass
+        print("Error: Invalid input.")
+
+    # Read hospital preferences
+    hospital_prefs = {}
+    print(f"Enter {n} lists of some permutation of 1..{n} to represent hospital preferences.")
+    for i in range(1, n + 1):
+        while True:
+            try:
+                prefs = list(map(int, input().split()))
+                if len(prefs) != n:
+                    raise ValueError
+                hospital_prefs[i] = prefs
+                break
+            except ValueError:
+                print("Error: Invalid input.")
+
+    # Read student preferences
+    student_prefs = {}
+    print(f"Enter {n} lists of some permutation of 1..{n} to represent student preferences.")
+    for i in range(1, n + 1):
+        while True:
+            try:
+                prefs = list(map(int, input().split()))
+                if len(prefs) != n:
+                    raise ValueError
+                student_prefs[i] = prefs
+                break
+            except ValueError:
+                print("Error: Invalid input.")
+
+    return n, hospital_prefs, student_prefs
+    
+
+def read_pairs(n: int) -> Dict[int, int]:
+    print(f"Enter {n} [hospital, student] pairs, consisting of two ints 1..{n} separated by a space:")
+
+    pairs = {}
+    while len(pairs) < n:
+        line = input().strip()
+        parts = line.split()
+
+        if len(parts) != 2:
+            print("Error: Invalid pairings.")
+            continue
+
+        try:
+            h, s = int(parts[0]), int(parts[1])
+        except ValueError:
+            print("Error: Invalid pairings.")
+            continue
+
+        if h in pairs:
+            print("Error: Invalid pairings.")
+            continue
+
+        pairs[h] = s
+
+    return pairs
+
+    

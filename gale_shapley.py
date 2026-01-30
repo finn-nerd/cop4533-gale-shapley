@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from typing import List, Dict
-from data_helpers import valid_input
+from data_helpers import valid_input, read_input
 
 
 def gale_shapley(n: int, hospital_preferences: Dict[int, List[int]], student_preferences: Dict[int, List[int]]) -> Dict[int, int]:
@@ -78,19 +78,7 @@ def main():
             hospital_prefs  ] n lines, n numbers long each
             student_prefs   ] n lines, n numbers long each
     """
-    n = int(input())
-    
-    # Read hospital preferences
-    hospital_prefs = {}
-    for i in range(1, n + 1):
-        prefs = list(map(int, input().split()))
-        hospital_prefs[i] = prefs
-    
-    # Read student preferences
-    student_prefs = {}
-    for i in range(1, n + 1):
-        prefs = list(map(int, input().split()))
-        student_prefs[i] = prefs
+    n, hospital_prefs, student_prefs = read_input()
 
     # Run algorithm and print results
     print("----- Gale-Shapley Pairings -----")
