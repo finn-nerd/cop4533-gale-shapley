@@ -18,6 +18,8 @@
 
     verifier.py (the verifier)
 
+    scalability.py (creates the graphs for Task C)
+
     README.md
 
 ### **To run the matcher:**
@@ -40,13 +42,15 @@
 The pairings from the matcher should print in the command line. The pairings should match the "example.out" file in "data/example.out". 
 
 ### **To run the verifier:**
-* Run python verifier.py
+* Run command:
+    * python verifier.py
 * It will prompt the user for input method (.in file or manual input).
-* It will ask you to either provide pairings or use a .out file.
+* It will ask you to either provide pairings manually or use a .out file.
 * It will then validate the pairings.
 
 ### **To get the graph for runtimes of the matcher and verifier:**
-* Run python scalability.py
+* Run command:
+    * python scalability.py
 
 ### **Assumptions**
 * Have "python" already installed.

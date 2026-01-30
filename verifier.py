@@ -133,7 +133,7 @@ def main():
         n, hospital_prefs, student_prefs = read_input()
 
         while True:
-            resp = input("Manually input pairings? (Y/N): ").strip().lower()
+            resp = input("Manually output pairings? (Y/N): ").strip().lower()
             if resp in ("y", "n"):
                 break
             print("Enter Y or N.")
