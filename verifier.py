@@ -91,8 +91,6 @@ def verifier(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[i
     print("VALID STABLE")
     return True
 
-
-
 def main():
     """ (sara)
     Measures the running time of gale_shapley() and verifier() on progressively increasing n.

@@ -52,7 +52,6 @@ def gale_shapley(n: int, hospital_preferences: Dict[int, List[int]], student_pre
                 break
 
             # If student is paired but prefers this hospital, break old pair and create new one
-            # This comparison makes it n^3, but I don't feel like adding a quick-lookup ranking map
             old_hospital = paired_students[student]
             if student_prefs[student].index(hospital) < student_prefs[student].index(old_hospital):
                 pairings.pop(old_hospital) # break prev. pair
@@ -70,7 +69,7 @@ def gale_shapley(n: int, hospital_preferences: Dict[int, List[int]], student_pre
 def main():
     """ (finn)
     Runnable from command line:
-        cat input.in | python gale-shapley.py
+        cat input.in | python gale_shapley.py
         OR
         python gale-shapley.py
             which will prompt for input using stdin in the format:

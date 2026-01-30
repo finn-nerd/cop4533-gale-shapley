@@ -66,7 +66,6 @@ def valid_input(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dic
         
     return True
 
-
 def generate_input(n: int) -> Tuple[int, Dict[int, List[int]], Dict[int, List[int]]]:
     """ (sara)
     Takes in n, the number of hospitals / students.
@@ -101,7 +100,6 @@ def generate_input_file(n: int) -> str:
     """ Shortcut function to generate input file for testing. """
     n, hospital_prefs, student_prefs = generate_input(n)
     return pack_input(n, hospital_prefs, student_prefs)
-
 
 def parse_input(input_file: str) -> Tuple[int, Dict[int, List[int]], Dict[int, List[int]]]:
     """ (finn)
@@ -159,7 +157,6 @@ def parse_input(input_file: str) -> Tuple[int, Dict[int, List[int]], Dict[int, L
     # Return successfully
     return n, hospital_prefs, student_prefs
 
-
 def pack_input(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict[int, List[int]]) -> str:
     """ (sara)
     Creates a .in file containing input in the G-S input file format.
@@ -195,7 +192,6 @@ def pack_input(n: int, hospital_prefs: Dict[int, List[int]], student_prefs: Dict
 
     return filename
 
-
 def parse_output(filename: str) -> Dict[int, int]:
     """ (sara)
     Parse output from a file in the G-S output file format.
@@ -223,7 +219,6 @@ def parse_output(filename: str) -> Dict[int, int]:
             pairs[hospital] = student
 
     return pairs
-
 
 def pack_output(output: Dict[int, int]) -> str:
     """ (finn)
